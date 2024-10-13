@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "XAXB 猜數字遊戲";
+    var guessHistory = ViewBag.GuessHistory as List<GuessModel>;
+    var totalGuesses = ViewBag.TotalGuesses;
+    var isGameWon = ViewBag.IsGameWon;
+    var secretNumber = ViewBag.SecretNumber;
+}
+
+<h1>XAXB 猜數字遊戲</h1>
+
+@if (isGameWon)
+{
+    <h2>恭喜你猜對了！正確數字是：@secretNumber</h2>
+    <form method="post" action="/Game/Restart">
+        <button type="submit">重新開始遊戲</button>
+    </form>
+}
+else
+{
+    <form method="post" action="/Game/Guess">
+        <label for="userGuess">輸入你的猜測 (四位數)：</label>
+        <input type="text" id="userGuess" name="userGuess" maxlength="4" required />
+        <button type="submit">提交</button>
+    </form>
+
+    @if (guessHistory != null && guessHistory.Count > 0)
+    {
+        <h3>猜測歷史</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>猜測數字</th>
+                    <th>結果 (A)</th>
+                    <th>結果 (B)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var guess in guessHistory)
+                {
+                    <tr>
+                        <td>@guess.Guess</td>
+                        <td>@guess.ACount</td>
+                        <td>@guess.BCount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <p>總猜測次數：@totalGuesses</p>
+}
